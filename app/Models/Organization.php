@@ -19,7 +19,6 @@ class Organization extends Model
         'size',
         'country',
         'timezone',
-        'training_goal',
         'description',
         'logo',
         'primary_color',

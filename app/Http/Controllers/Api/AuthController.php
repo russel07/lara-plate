@@ -712,7 +712,7 @@ class AuthController extends Controller
                 'id' => $role->id,
                 'name' => $role->name,
             ])->values(),
-            'permissions' => $user->permissionSlugs(),
+            'permissions' => $user->getCachedPermissions(),
         ];
     }
 }

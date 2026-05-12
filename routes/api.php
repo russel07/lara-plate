@@ -25,6 +25,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/central/activity-logs', [ActivityLogController::class, 'index']);
 });
 
+// Organization Management (Super Admin and Admin)
+Route::middleware(['auth:sanctum', 'token.expired', 'audit'])->group(function () {
+    Route::post('/central/organizations', [OrganizationController::class, 'store']);
+    Route::put('/central/organizations/{id}', [OrganizationController::class, 'update']);
+    Route::delete('/central/organizations/{id}', [OrganizationController::class, 'destroy']);
+    Route::post('/central/verify-slug', [OrganizationController::class, 'verifySlug']);
+});
+
 Route::middleware(['auth:sanctum', 'permission:manage_roles'])->prefix('rbac')->group(function () {
     Route::get('roles', [RbacController::class, 'roles']);
     Route::get('permissions', [RbacController::class, 'permissions']);

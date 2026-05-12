@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('size')->nullable();
             $table->string('country')->nullable();
             $table->string('timezone')->nullable();
-            $table->string('training_goal')->nullable();
             $table->text('description')->nullable();
             $table->string('logo')->nullable();
             $table->string('primary_color')->nullable();
