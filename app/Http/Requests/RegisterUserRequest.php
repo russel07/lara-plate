@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -28,7 +30,6 @@ class RegisterUserRequest extends FormRequest
             ],
             'phone' => 'required|string',
             'role' => 'nullable|string|in:admin,superadmin',
-            'job_title' => 'nullable|string|max:255',
         ];
     }
 
@@ -37,7 +38,6 @@ class RegisterUserRequest extends FormRequest
         $this->merge([
             'phone' => $this->input('phone') === '' ? null : $this->input('phone'),
             'role' => $this->input('role') === '' ? null : $this->input('role'),
-            'job_title' => $this->input('job_title') === '' ? null : $this->input('job_title'),
         ]);
     }
 
@@ -53,5 +53,14 @@ class RegisterUserRequest extends FormRequest
             'phone.regex' => 'Phone number format is invalid',
             'role.in' => 'Role must be one of: admin, superadmin',
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(response()->json([
+            'status' => false,
+            'message' => 'The given data was invalid.',
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }

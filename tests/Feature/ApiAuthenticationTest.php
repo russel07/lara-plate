@@ -3,7 +3,8 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class ApiAuthenticationTest extends TestCase
@@ -50,5 +51,31 @@ class ApiAuthenticationTest extends TestCase
             ->assertOk()
             ->assertJsonPath('status', true)
             ->assertJsonPath('message', 'Logged out successfully');
+    }
+
+    public function test_central_web_registration_route_is_registered(): void
+    {
+        $this->assertTrue(Route::has('central.register'));
+
+        $route = app('router')->getRoutes()->match(Request::create('/central/register', 'POST'));
+
+        $this->assertSame('central.register', $route->getName());
+        $this->assertSame('App\\Http\\Controllers\\Api\\AuthController@register', $route->getActionName());
+    }
+
+    public function test_central_web_registration_returns_json_validation_errors_instead_of_redirecting(): void
+    {
+        $response = $this->post('/central/register', [
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'phone' => '+1-555-123-4567',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonPath('status', false)
+            ->assertJsonPath('message', 'The given data was invalid.')
+            ->assertJsonPath('errors.password.0', 'Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.');
     }
 }

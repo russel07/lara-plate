@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\LicenseActivationController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\RbacController;
+use App\Http\Controllers\Api\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 
 // ==========================================
@@ -21,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/central/resend-otp', [AuthController::class, 'resendOtp']);
     Route::get('/central/me', [AuthController::class, 'me']);
     Route::post('/central/logout', [AuthController::class, 'logout']);
+    Route::get('/central/activity-logs', [ActivityLogController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'permission:manage_roles'])->prefix('rbac')->group(function () {
@@ -54,4 +56,9 @@ Route::group([
         Route::post('/change-password', [AuthController::class, 'changePassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
      });
+
+     // Organization Management (Super Admin and Admin)
+    Route::middleware(['auth:sanctum', 'token.expired', 'audit', 'role:admin,superadmin'])->group(function () {
+        // Add tenant-specific routes here
+    });
 });
