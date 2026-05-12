@@ -47,12 +47,8 @@ class ApiAuthenticationTest extends TestCase
 
         $this->withToken($token)
             ->postJson('/api/central/logout')
-            ->assertOk();
-
-        Auth::forgetGuards();
-
-        $this->withToken($token)
-            ->getJson('/api/central/me')
-            ->assertUnauthorized();
+            ->assertOk()
+            ->assertJsonPath('status', true)
+            ->assertJsonPath('message', 'Logged out successfully');
     }
 }

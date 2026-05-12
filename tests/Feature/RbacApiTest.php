@@ -16,7 +16,7 @@ class RbacApiTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $adminToken = $this->postJson('/api/auth/login', [
+        $adminToken = $this->postJson('/api/central/login', [
             'email' => 'admin@example.com',
             'password' => 'password',
         ])->json('token');
