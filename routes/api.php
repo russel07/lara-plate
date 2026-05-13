@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\RbacController;
 use App\Http\Controllers\Api\ActivityLogController;
+use App\Http\Controllers\Api\MediaController;
 use Illuminate\Support\Facades\Route;
 
 // ==========================================
@@ -63,6 +64,18 @@ Route::group([
         Route::put('/profile-settings', [AuthController::class, 'updateProfileSettings']);
         Route::post('/change-password', [AuthController::class, 'changePassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
+
+        // Media Management
+        Route::middleware(['permission:manage_media'])->group(function () {
+            Route::post('/media/upload', [MediaController::class, 'upload']);
+            Route::get('/media', [MediaController::class, 'index']);
+            Route::get('/media/{id}', [MediaController::class, 'show']);
+            Route::put('/media/{id}', [MediaController::class, 'update']);
+            Route::delete('/media/{id}', [MediaController::class, 'destroy']);
+        });
+
+        // File serve (accessible by authenticated users)
+        Route::get('/file/{hash}', [MediaController::class, 'serve']);
      });
 
      // Organization Management (Super Admin and Admin)

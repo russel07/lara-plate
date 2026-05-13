@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Organization;
-use App\Models\PersonalAccessToken;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class IdentifyTenant
 {

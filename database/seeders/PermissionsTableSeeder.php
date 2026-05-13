@@ -22,6 +22,7 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'Create Users', 'slug' => 'create_users', 'description' => 'Ability to create new user accounts', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'Edit Users', 'slug' => 'edit_users', 'description' => 'Ability to edit existing user accounts', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'Delete Users', 'slug' => 'delete_users', 'description' => 'Ability to delete user accounts', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'Manage Media', 'slug' => 'manage_media', 'description' => 'Ability to upload, view, update and delete media files', 'created_at' => $now, 'updated_at' => $now],
         ], ['slug'], ['name', 'description', 'updated_at']);
     }
 }
